@@ -4,8 +4,9 @@ using System.Collections.Generic;
 public class MapManager : MonoBehaviour
 {
 	public static MapManager mapMang { get; private set; }
-	public Vector3[] floors { get; private set; }
-	public Vector3[] walls { get; private set; }
+	public HashSet<Vector3> floors { get; private set; }
+	public HashSet<Vector3> walls { get; private set; }
+	public Vector3 startPos { get; private set; }
 
 	private const int playableHeight = 30; //Max y distance from origin
 	private const int playableWidth  = 30; //Max x distance from origin
@@ -40,7 +41,6 @@ public class MapManager : MonoBehaviour
 		mapHolder.name = "Map";
 
 		List<Vector3Int> floorGens = new List<Vector3Int>();
-		//HashSet<Vector3Int> fl;
 		List<Vector3Int> wallGens = new List<Vector3Int>();
 
 		#region GenerateFloors
@@ -66,6 +66,7 @@ public class MapManager : MonoBehaviour
 			if (isSafe) { roomOrigins.Add(newRoom); }
 		}
 		floorGens = new List<Vector3Int>(roomOrigins);
+		startPos = roomOrigins[0];
 
 		//fill rooms
 		foreach (Vector3Int roomO in roomOrigins)
@@ -84,39 +85,39 @@ public class MapManager : MonoBehaviour
 			}
 		}
 
-		//corridors
+		//[C]orridors
 		while (roomOrigins.Count > 1)
 		{
-			Vector3Int start = roomOrigins[0];
-			Vector3Int end = roomOrigins[1];
+			Vector3Int cStart = roomOrigins[0];
+			Vector3Int cEnd = roomOrigins[1];
 			
-			if (start.x < end.x)
+			if (cStart.x < cEnd.x)
 			{
-				for (int xC = start.x; xC <= end.x; xC++)
+				for (int xC = cStart.x; xC <= cEnd.x; xC++)
 				{
-					floorGens.Add(new Vector3Int(xC, start.y, start.z));
+					floorGens.Add(new Vector3Int(xC, cStart.y, cStart.z));
 				}
 			}
-			else if (start.x > end.x)
+			else if (cStart.x > cEnd.x)
 			{
-				for (int xC = start.x; xC >= end.x; xC--)
+				for (int xC = cStart.x; xC >= cEnd.x; xC--)
 				{
-					floorGens.Add(new Vector3Int(xC, start.y, start.z));
+					floorGens.Add(new Vector3Int(xC, cStart.y, cStart.z));
 				}
 			}
 
-			if (start.y < end.y)
+			if (cStart.y < cEnd.y)
 			{
-				for (int yC = start.y; yC < end.y; yC++)
+				for (int yC = cStart.y; yC < cEnd.y; yC++)
 				{
-					floorGens.Add(new Vector3Int(end.x, yC, end.z));
+					floorGens.Add(new Vector3Int(cEnd.x, yC, cEnd.z));
 				}
 			}
-			else if (start.y > end.y)
+			else if (cStart.y > cEnd.y)
 			{
-				for (int yC = start.y; yC > end.y; yC--)
+				for (int yC = cStart.y; yC > cEnd.y; yC--)
 				{
-					floorGens.Add(new Vector3Int(end.x, yC, end.z));
+					floorGens.Add(new Vector3Int(cEnd.x, yC, cEnd.z));
 				}
 			}
 			
@@ -138,29 +139,28 @@ public class MapManager : MonoBehaviour
 
         #region PlaceTiles
         floors = ListConverter(floorGens);
-		for(int fi = 0; fi < floors.Length; fi++)
+		foreach (Vector3 vF in floors)
 		{
-			GameObject instF = Instantiate(floorPrefab, floors[fi], Quaternion.identity, mapHolder.transform);
-			instF.name = "floor"+fi.ToString();
+			GameObject instF = Instantiate(floorPrefab, vF, Quaternion.identity, mapHolder.transform);
+			instF.name = "floor";
 		}
 
 		walls  = ListConverter(wallGens);
-		for (int wi = 0; wi < walls.Length; wi++)
+		foreach (Vector3 vW in walls)
 		{
-			GameObject instW = Instantiate(wallPrefab, walls[wi], Quaternion.identity, mapHolder.transform);
-			instW.name = "wall"+wi.ToString();
+			GameObject instW = Instantiate(wallPrefab, vW, Quaternion.identity, mapHolder.transform);
+			instW.name = "wall";
 		}
 		#endregion PlaceTiles
 	}
 
-	private Vector3[] ListConverter (List<Vector3Int> vInts)
+	private HashSet<Vector3> ListConverter (List<Vector3Int> vInts)
 	{
-		Vector3[] result = new Vector3[vInts.Count];
-		Vector3Int[] v = vInts.ToArray();
+		HashSet<Vector3> result = new HashSet<Vector3>();
 		
-		for (int i = 0; i < result.Length; i++)
+		for (int i = 0; i < vInts.Count; i++)
 		{
-			result[i] = v[i];
+			result.Add(vInts[i]);
 		}
 
 		return result;

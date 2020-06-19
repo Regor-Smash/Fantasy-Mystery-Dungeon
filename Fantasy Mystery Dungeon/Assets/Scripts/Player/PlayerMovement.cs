@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
 	private void Start ()
 	{
 		//rend = GetComponent<SpriteRenderer>();
+		transform.position = MapManager.mapMang.startPos;
 		LookAt();
 	}
 
@@ -51,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
 			if(newDirection != Vector3Int.zero)
 			{
 				Vector3 newTarget = transform.position + newDirection;
-				if (System.Array.Exists(MapManager.mapMang.floors, v => v == newTarget)) //Only move if floor there
+				if (MapManager.mapMang.floors.Contains(newTarget)) //Only move if floor there
 				{
 					originPos = transform.position;
 					targetPos = originPos + newDirection;
