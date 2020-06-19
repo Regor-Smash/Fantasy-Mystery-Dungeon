@@ -18,8 +18,11 @@ public class PlayerMovement : MonoBehaviour
 	private Vector3 originPos;
 	private Vector3 targetPos;
 	private float moveIncrement;
-	
-	private void Start ()
+
+	public delegate void MoveInfo(string character, Vector3 pos);
+	public static event MoveInfo playerMoved;
+
+	private void Start()
 	{
 		//rend = GetComponent<SpriteRenderer>();
 		transform.position = MapManager.mapMang.startPos;
@@ -76,6 +79,8 @@ public class PlayerMovement : MonoBehaviour
 				transform.position = targetPos;
 				moveLerp = 0;
 				moveIncrement = 0;
+
+				if(playerMoved != null) { playerMoved(gameObject.name, targetPos); }
 			}
 		}
 	}

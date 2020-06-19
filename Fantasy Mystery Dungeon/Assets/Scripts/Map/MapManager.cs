@@ -7,6 +7,7 @@ public class MapManager : MonoBehaviour
 	public HashSet<Vector3> floors { get; private set; }
 	public HashSet<Vector3> walls { get; private set; }
 	public Vector3 startPos { get; private set; }
+	public Vector3 endPos { get; private set; }
 
 	private const int playableHeight = 30; //Max y distance from origin
 	private const int playableWidth  = 30; //Max x distance from origin
@@ -45,11 +46,9 @@ public class MapManager : MonoBehaviour
 
 		#region GenerateFloors
 		int roomsAmount = Random.Range(4, 8);
-		Debug.Log("Amount=" + roomsAmount.ToString());
 		List<Vector3Int> roomOrigins = new List<Vector3Int>();
 		while (roomOrigins.Count < roomsAmount)
 		{
-			Debug.Log("Count=" + roomOrigins.Count.ToString());
 			Vector3Int newRoom = new Vector3Int(Random.Range(-playableWidth,  playableWidth  + 1),
 				                                Random.Range(-playableHeight, playableHeight + 1), 0);
 
@@ -67,6 +66,8 @@ public class MapManager : MonoBehaviour
 		}
 		floorGens = new List<Vector3Int>(roomOrigins);
 		startPos = roomOrigins[0];
+		endPos = roomOrigins[roomOrigins.Count - 1];
+		Instantiate<GameObject>(Resources.Load<GameObject>("Dungeons/StairsDown"), endPos, Quaternion.identity);
 
 		//fill rooms
 		foreach (Vector3Int roomO in roomOrigins)
