@@ -5,5 +5,5 @@ public class InventoryItem : ScriptableObject
 {
     public string itemName;
     public Sprite itemSprite;
-    public int value;
+    public int goldValue;
 }

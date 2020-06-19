@@ -1,20 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class DownStairs : MonoBehaviour
 {
     private void OnEnable()
     {
-        PlayerMovement.playerMoved += UseStairsDown;
+        PlayerMovement.playerMoved += UseDownStairs;
     }
 
     private void OnDisable()
     {
-        PlayerMovement.playerMoved -= UseStairsDown;
+        PlayerMovement.playerMoved -= UseDownStairs;
     }
 
-    private void UseStairsDown(string na, Vector3 playerPos)
+    private void UseDownStairs(string na, Vector3 playerPos)
     {
         if (playerPos == transform.position)
         {

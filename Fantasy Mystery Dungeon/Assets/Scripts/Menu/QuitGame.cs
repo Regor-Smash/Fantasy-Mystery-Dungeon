@@ -2,7 +2,7 @@
 
 public class QuitGame : MonoBehaviour
 {
-    public void Quit()
+    public static void Quit()
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

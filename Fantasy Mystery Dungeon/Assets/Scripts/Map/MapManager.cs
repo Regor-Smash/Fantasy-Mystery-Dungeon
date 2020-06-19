@@ -103,8 +103,8 @@ public class MapManager : MonoBehaviour
 		//fill rooms
 		foreach (Vector3Int roomO in roomOrigins)
 		{
-			int radX = Random.Range(2, 6);
-			int radY = Random.Range(2, 6);
+			int radX = Random.Range(1, 5);
+			int radY = Random.Range(1, 5);
 			for (int x = -radX; x <= radX; x++)
 			{
 				for (int y = -radY; y <= radY; y++)
