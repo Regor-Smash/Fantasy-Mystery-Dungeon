@@ -7,6 +7,9 @@ public class MapManager : MonoBehaviour
 	public Vector3[] floors { get; private set; }
 	public Vector3[] walls { get; private set; }
 
+	private const int playableHeight = 30; //Max y distance from origin
+	private const int playableWidth  = 30; //Max x distance from origin
+
 	private GameObject floorPrefab;
 	private GameObject wallPrefab;
 	private GameObject emptyPrefab;
@@ -23,7 +26,7 @@ public class MapManager : MonoBehaviour
 			Destroy(this);
 		}
 
-		string sceneName = "Dungeon1";
+		string sceneName = "Dungeon1"; //Temporary
 		floorPrefab = Resources.Load<GameObject>("Dungeons/" + sceneName + "/" + sceneName + " Floor Tile");
 		wallPrefab  = Resources.Load<GameObject>("Dungeons/" + sceneName + "/" + sceneName + " Wall Tile");
 		emptyPrefab = Resources.Load<GameObject>("Static Empty");
@@ -41,45 +44,83 @@ public class MapManager : MonoBehaviour
 		List<Vector3Int> wallGens = new List<Vector3Int>();
 
 		#region GenerateFloors
-		/*for (int f = -5; f <= 5; f++)
+		int roomsAmount = Random.Range(4, 8);
+		Debug.Log("Amount=" + roomsAmount.ToString());
+		List<Vector3Int> roomOrigins = new List<Vector3Int>();
+		while (roomOrigins.Count < roomsAmount)
 		{
-			floorGens.Add(new Vector3Int(f, 0, 0));
-			if(Random.value > 0.5)
+			Debug.Log("Count=" + roomOrigins.Count.ToString());
+			Vector3Int newRoom = new Vector3Int(Random.Range(-playableWidth,  playableWidth  + 1),
+				                                Random.Range(-playableHeight, playableHeight + 1), 0);
+
+			bool isSafe = true;
+			float safeDist = 10f;
+			float longDist = 40f;
+			for(int ri = 0; ri < roomOrigins.Count; ri++)
 			{
-				floorGens.Add(new Vector3Int(f, 1, 0));
+				isSafe = (Vector3Int.Distance(newRoom, roomOrigins[ri]) > safeDist) &&
+					     (Vector3Int.Distance(newRoom, roomOrigins[ri]) < longDist);
+				if (!isSafe) { break; }
 			}
-		}*/
-		Vector3Int room1 = new Vector3Int(Random.Range(1, 8), 0, 0); //Where the room starts from
-		int room1H = Random.Range(2, 6);
-		int room1W = Random.Range(2, 6);
 
-		Vector3Int room2 = new Vector3Int(Random.Range(-7, 0), 0, 0); //Where the room starts from
-		int room2H = Random.Range(2, 6);
-		int room2W = Random.Range(2, 6);
+			if (isSafe) { roomOrigins.Add(newRoom); }
+		}
+		floorGens = new List<Vector3Int>(roomOrigins);
 
-		for (int f = room2.x+1; f <= room1.x-1; f++)//corridor
+		//fill rooms
+		foreach (Vector3Int roomO in roomOrigins)
 		{
-			floorGens.Add(new Vector3Int(f, 0, 0));
+			int radX = Random.Range(2, 6);
+			int radY = Random.Range(2, 6);
+			for (int x = -radX; x <= radX; x++)
+			{
+				for (int y = -radY; y <= radY; y++)
+				{
+					if (x != 0 || y != 0)
+					{
+						floorGens.Add(roomO + new Vector3Int(x,y,0));
+					}
+				}
+			}
 		}
 
-		int r1Offset = Random.Range(0, room1H);
-		Debug.Log("Room1: " + room1.ToString() + ",  room1H: " + room1H + ",  room1Offset: " + r1Offset);
-		for(int r1H = 0; r1H < room1H; r1H++)
+		//corridors
+		while (roomOrigins.Count > 1)
 		{
-			for (int r1W = 0; r1W < room1W; r1W++)
+			Vector3Int start = roomOrigins[0];
+			Vector3Int end = roomOrigins[1];
+			
+			if (start.x < end.x)
 			{
-				floorGens.Add(new Vector3Int(room1.x + r1W, r1H - r1Offset, 0));
+				for (int xC = start.x; xC <= end.x; xC++)
+				{
+					floorGens.Add(new Vector3Int(xC, start.y, start.z));
+				}
 			}
-		}
+			else if (start.x > end.x)
+			{
+				for (int xC = start.x; xC >= end.x; xC--)
+				{
+					floorGens.Add(new Vector3Int(xC, start.y, start.z));
+				}
+			}
 
-		int r2Offset = Random.Range(0, room2H);
-		Debug.Log("Room2: " + room2.ToString() + ",  room2H: " + room2H + ",  room2Offset: " + r2Offset);
-		for (int r2H = 0; r2H < room2H; r2H++)
-		{
-			for (int r2W = 0; r2W < room2W; r2W++)
+			if (start.y < end.y)
 			{
-				floorGens.Add(new Vector3Int(room2.x - r2W, r2H - r2Offset, 0));
+				for (int yC = start.y; yC < end.y; yC++)
+				{
+					floorGens.Add(new Vector3Int(end.x, yC, end.z));
+				}
 			}
+			else if (start.y > end.y)
+			{
+				for (int yC = start.y; yC > end.y; yC--)
+				{
+					floorGens.Add(new Vector3Int(end.x, yC, end.z));
+				}
+			}
+			
+			roomOrigins.RemoveAt(0);
 		}
 		#endregion GenerateFloors
 
@@ -100,14 +141,14 @@ public class MapManager : MonoBehaviour
 		for(int fi = 0; fi < floors.Length; fi++)
 		{
 			GameObject instF = Instantiate(floorPrefab, floors[fi], Quaternion.identity, mapHolder.transform);
-			instF.name = "floor";
+			instF.name = "floor"+fi.ToString();
 		}
 
 		walls  = ListConverter(wallGens);
 		for (int wi = 0; wi < walls.Length; wi++)
 		{
 			GameObject instW = Instantiate(wallPrefab, walls[wi], Quaternion.identity, mapHolder.transform);
-			instW.name = "wall";
+			instW.name = "wall"+wi.ToString();
 		}
 		#endregion PlaceTiles
 	}
