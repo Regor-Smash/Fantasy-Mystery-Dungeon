@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: Small Health Potion
   itemSprite: {fileID: -6202940564662568092, guid: 8412bbdff49208342b97e96b906cd4cd,
     type: 3}
-  value: 10
+  goldValue: 8
