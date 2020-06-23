@@ -1,9 +1,5 @@
-﻿using UnityEngine;
-
-[CreateAssetMenu(fileName = "NewInventoryItem", menuName = "ScriptableObjects/InventoryItem", order = 0)]
-public class InventoryItem : ScriptableObject
+﻿public class InventoryItem
 {
-    public string itemName;
-    public Sprite itemSprite;
-    public int goldValue;
+    public ItemData item;
+    public int amount;
 }
