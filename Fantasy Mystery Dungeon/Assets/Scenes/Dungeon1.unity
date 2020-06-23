@@ -219,6 +219,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b16af7cb183024a9f4686f4abf7953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data:
+    floorHeight: 30
+    floorWidth: 30
+    totalFloors: 3
 --- !u!4 &314789893
 Transform:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HubMapManager : MapManager
 {
-    protected override List<Vector3Int> GenerateFloors(int roomAmount)
+    protected override List<Vector3Int> GenerateFloors(int roomAmount, Vector3Int roomOrigin)
     {
         startPos = Vector3.zero;
 

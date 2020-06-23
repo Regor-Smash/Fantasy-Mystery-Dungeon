@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 	private const string vertInput = "Vertical";
 
 	private float moveLerp = 0;
-	private float duration = 20;
+	private float duration = 10;
 	private bool isMoving
 	{
 		get
@@ -22,6 +22,8 @@ public class PlayerMovement : MonoBehaviour
 	public delegate void MoveInfo(string character, Vector3 pos);
 	public static event MoveInfo playerMoved;
 
+	public static GameObject currentPlayer { get; private set; }
+
 	private void Start()
 	{
 		//rend = GetComponent<SpriteRenderer>();
@@ -32,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
 	public void LookAt()
 	{
 		FollowCam.instance.FollowTarget(transform);
+		currentPlayer = gameObject;
 	}
 	
 	private void Update ()
@@ -83,5 +86,10 @@ public class PlayerMovement : MonoBehaviour
 				if(playerMoved != null) { playerMoved(gameObject.name, targetPos); }
 			}
 		}
+	}
+
+	private void OnDestroy()
+	{
+		currentPlayer = null;
 	}
 }

@@ -17,6 +17,7 @@ public class DownStairs : MonoBehaviour
         if (playerPos == transform.position)
         {
             Debug.Log(na + " used the stairs.");
+            MapManager.mapMang.NextFloor();
         }
     }
 }
