@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [System.Serializable]
 public class DungeonData
@@ -30,5 +28,43 @@ public class DungeonData
         {
             return totalFloors;
         }
+    }
+
+    [SerializeField] private bool specialFinalFloor;
+    public bool SpecialFinalFloor
+    {
+        get
+        {
+            return specialFinalFloor;
+        }
+    }
+
+    [SerializeField] private int specialFloorRooms;
+    public int SpecialFloorRooms
+    {
+        get
+        {
+            return specialFloorRooms;
+        }
+    }
+
+    public DungeonData (int _floorHeight, int _floorWidth, int _totalFloors)
+    {
+        floorHeight = _floorHeight;
+        floorWidth  = _floorWidth;
+        totalFloors = _totalFloors;
+
+        specialFinalFloor = false;
+        specialFloorRooms = 0;
+    }
+
+    public DungeonData(int _floorHeight, int _floorWidth, int _totalFloors,
+                       bool _specialFloor, int _specialFloorRooms)
+    {
+        floorHeight = _floorHeight;
+        floorWidth = _floorWidth;
+        totalFloors = _totalFloors;
+        specialFinalFloor = _specialFloor;
+        specialFloorRooms = _specialFloorRooms;
     }
 }

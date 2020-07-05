@@ -42,7 +42,15 @@ public class MapManager : MonoBehaviour
 	private void Generate()
 	{
 		Vector3Int floorPoint = new Vector3Int(data.FloorWidth * 3 * (currentFloor - 1), 0, 0);
-		List<Vector3Int> floorGens = GenerateFloors(Random.Range(4, 8), floorPoint);
+		List<Vector3Int> floorGens;
+		if (data.SpecialFinalFloor && currentFloor == data.TotalFloors)
+		{
+			floorGens = GenerateFloors(data.SpecialFloorRooms, floorPoint);
+		}
+		else
+		{
+			floorGens = GenerateFloors(Random.Range(4, 8), floorPoint);
+		}
 		List<Vector3Int> wallGens = new List<Vector3Int>();
 
 		#region GenerateWalls
@@ -84,7 +92,7 @@ public class MapManager : MonoBehaviour
 		List<Vector3Int> roomOrigins = new List<Vector3Int>();
 		while (roomOrigins.Count < roomsAmount)
 		{
-			Vector3Int newRoom = floorOrigin + new Vector3Int(Random.Range(-data.FloorWidth, data.FloorWidth + 1),
+			Vector3Int newRoom = floorOrigin + new Vector3Int(Random.Range(-data.FloorWidth,  data.FloorWidth  + 1),
 															  Random.Range(-data.FloorHeight, data.FloorHeight + 1), 0);
 
 			bool isSafe = true;

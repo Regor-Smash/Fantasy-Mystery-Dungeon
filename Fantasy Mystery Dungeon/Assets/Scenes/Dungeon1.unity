@@ -222,7 +222,9 @@ MonoBehaviour:
   data:
     floorHeight: 30
     floorWidth: 30
-    totalFloors: 3
+    totalFloors: 4
+    specialFinalFloor: 1
+    specialFloorRooms: 1
 --- !u!4 &314789893
 Transform:
   m_ObjectHideFlags: 0
