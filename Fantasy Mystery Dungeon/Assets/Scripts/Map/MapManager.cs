@@ -15,6 +15,9 @@ public class MapManager : MonoBehaviour
 
 	private GameObject floorPrefab;
 	private GameObject emptyPrefab;
+
+	public int FloorHeight { get { return data.FloorHeight; } }
+	public int FloorWidth  { get { return data.FloorWidth;  } }
 	
 	private void Awake ()
 	{
@@ -172,9 +175,9 @@ public class MapManager : MonoBehaviour
 			Generate();
 			PlayerMovement.currentPlayer.transform.position = startPos;
 		}
-		else //Return to Hub
+		else //Move to next dungeon
 		{
-			SceneManager.LoadScene(1 - SceneManager.GetActiveScene().buildIndex); //Load opposite scene
+			SceneManager.LoadScene(data.NextDungeon);
 
 			//Reward
 			PlayerInventory.ChangeGold(20);
