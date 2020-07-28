@@ -11,10 +11,10 @@ public class MapManager : MonoBehaviour
 	public Vector3 endPos { get; protected set; }
 
 	[SerializeField] private DungeonData data;
-	private int currentFloor = 1;
+	private int latestFloor = 1;
 
 	private GameObject floorPrefab;
-	private GameObject wallPrefab;
+	//private GameObject wallPrefab;
 	private GameObject emptyPrefab;
 	
 	private void Awake ()
@@ -33,17 +33,18 @@ public class MapManager : MonoBehaviour
 
         string sceneName = SceneManager.GetActiveScene().name;
 		floorPrefab = Resources.Load<GameObject>("Dungeons/" + sceneName + "/" + sceneName + " Floor Tile");
-		wallPrefab  = Resources.Load<GameObject>("Dungeons/" + sceneName + "/" + sceneName + " Wall Tile");
+		//wallPrefab  = Resources.Load<GameObject>("Dungeons/" + sceneName + "/" + sceneName + " Wall Tile");
 		emptyPrefab = Resources.Load<GameObject>("Static Empty");
 		
 		Generate();
 	}
 
-	private void Generate()
+    #region mapGeneration
+    private void Generate()
 	{
-		Vector3Int floorPoint = new Vector3Int(data.FloorWidth * 3 * (currentFloor - 1), 0, 0);
+		Vector3Int floorPoint = new Vector3Int(data.FloorWidth * 3 * (latestFloor - 1), 0, 0);
 		List<Vector3Int> floorGens;
-		if (data.SpecialFinalFloor && currentFloor == data.TotalFloors)
+		if (data.SpecialFinalFloor && latestFloor == data.TotalFloors)
 		{
 			floorGens = GenerateFloors(data.SpecialFloorRooms, floorPoint);
 		}
@@ -52,7 +53,7 @@ public class MapManager : MonoBehaviour
 			floorGens = GenerateFloors(Random.Range(4, 8), floorPoint);
 		}
 		List<Vector3Int> wallGens = new List<Vector3Int>();
-
+		/*
 		#region GenerateWalls
 		Vector3Int wallOffset = new Vector3Int(0, 1, 0);
 		for (int w = 0; w < floorGens.Count; w++)
@@ -64,10 +65,10 @@ public class MapManager : MonoBehaviour
 			}
 		}
 		#endregion GenerateWalls
-
+		*/
 		#region PlaceTiles
 		GameObject mapHolder = Instantiate(emptyPrefab, floorPoint, Quaternion.identity);
-		mapHolder.name = "Floor " + currentFloor.ToString();
+		mapHolder.name = "Floor " + latestFloor.ToString();
 
 		floors = ListConverter(floorGens);
 		foreach (Vector3 vF in floors)
@@ -75,13 +76,13 @@ public class MapManager : MonoBehaviour
 			GameObject instF = Instantiate(floorPrefab, vF, Quaternion.identity, mapHolder.transform);
 			instF.name = "floor";
 		}
-
+		/*
 		walls  = ListConverter(wallGens);
 		foreach (Vector3 vW in walls)
 		{
 			GameObject instW = Instantiate(wallPrefab, vW, Quaternion.identity, mapHolder.transform);
 			instW.name = "wall";
-		}
+		}*/
 		#endregion PlaceTiles
 	}
 	
@@ -171,23 +172,6 @@ public class MapManager : MonoBehaviour
 		return result;
 	}
 
-	public void NextFloor()
-	{
-		if (currentFloor < data.TotalFloors) //Move to next floor
-		{
-			currentFloor++;
-			Generate();
-			PlayerMovement.currentPlayer.transform.position = startPos;
-		}
-		else //Return to Hub
-		{
-			SceneManager.LoadScene(1 - SceneManager.GetActiveScene().buildIndex); //Load opposite scene
-
-			//Reward
-			PlayerInventory.ChangeGold(20);
-		}
-	}
-
 	private HashSet<Vector3> ListConverter (List<Vector3Int> vInts)
 	{
 		HashSet<Vector3> result = new HashSet<Vector3>();
@@ -198,6 +182,24 @@ public class MapManager : MonoBehaviour
 		}
 
 		return result;
+	}
+	#endregion mapGeneration
+
+	public void NextFloor()
+	{
+		if (latestFloor < data.TotalFloors) //Move to next floor
+		{
+			latestFloor++;
+			Generate();
+			PlayerMovement.currentPlayer.transform.position = startPos;
+		}
+		else //Return to Hub
+		{
+			SceneManager.LoadScene(1 - SceneManager.GetActiveScene().buildIndex); //Load opposite scene
+
+			//Reward
+			PlayerInventory.ChangeGold(20);
+		}
 	}
 
 	private void OnDestroy()

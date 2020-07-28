@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 	private Vector3 targetPos;
 	private float moveIncrement;
 
+	private SpriteRenderer rend;
+
 	public delegate void MoveInfo(string character, Vector3 pos);
 	public static event MoveInfo playerMoved;
 
@@ -26,12 +28,12 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Start()
 	{
-		//rend = GetComponent<SpriteRenderer>();
+		rend = GetComponentInChildren<SpriteRenderer>();
 		transform.position = MapManager.mapMang.startPos;
-		LookAt();
+		FollowThis();
 	}
 
-	public void LookAt()
+	public void FollowThis()
 	{
 		FollowCam.instance.FollowTarget(transform);
 		currentPlayer = gameObject;
@@ -57,6 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
 			if(newDirection != Vector3Int.zero)
 			{
+				rend.transform.up = newDirection;
 				Vector3 newTarget = transform.position + newDirection;
 				if (MapManager.mapMang.floors.Contains(newTarget)) //Only move if floor there
 				{
