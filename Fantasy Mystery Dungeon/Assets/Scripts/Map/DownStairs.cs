@@ -2,6 +2,7 @@
 
 public class DownStairs : MonoBehaviour
 {
+    #region MoveEvent
     private void OnEnable()
     {
         PlayerMovement.playerMoved += UseDownStairs;
@@ -11,6 +12,7 @@ public class DownStairs : MonoBehaviour
     {
         PlayerMovement.playerMoved -= UseDownStairs;
     }
+    #endregion MoveEvent
 
     private void UseDownStairs(string na, Vector3 playerPos)
     {

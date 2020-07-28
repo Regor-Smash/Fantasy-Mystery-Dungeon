@@ -221,12 +221,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data:
-    floorHeight: 30
-    floorWidth: 30
-    totalFloors: 4
+    floorHeight: 40
+    floorWidth: 40
+    totalFloors: 5
     nextDungeon: Hub
-    specialFinalFloor: 1
-    specialFloorRooms: 2
+    specialFinalFloor: 0
+    specialFloorRooms: 1
 --- !u!4 &314789893
 Transform:
   m_ObjectHideFlags: 0
@@ -321,6 +321,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Follow Camera
+      objectReference: {fileID: 0}
+    - target: {fileID: 5169112099090834603, guid: bbef672bafbe0a0449c15d7f0416f2e8,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.21698111
+      objectReference: {fileID: 0}
+    - target: {fileID: 5169112099090834603, guid: bbef672bafbe0a0449c15d7f0416f2e8,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.17727652
+      objectReference: {fileID: 0}
+    - target: {fileID: 5169112099090834603, guid: bbef672bafbe0a0449c15d7f0416f2e8,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.060386255
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bbef672bafbe0a0449c15d7f0416f2e8, type: 3}
