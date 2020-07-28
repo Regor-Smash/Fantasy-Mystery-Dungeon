@@ -50,10 +50,6 @@ public class Creature : MonoBehaviour, IHealth
 		{
 			Die();
 		}
-		else
-		{
-			TakeDamage(1, DamageTypes.Raw);
-		}
 	}
 
 	#region IHealth
@@ -112,7 +108,10 @@ public class Creature : MonoBehaviour, IHealth
 
     protected void DealDamage(IHealth target)
 	{
+		//PH variables
 		int power = 5;
-		target.TakeDamage(power * TotalAttack, DamageTypes.Physical);
+		DamageTypes damageType = DamageTypes.Physical;
+
+		target.TakeDamage(power * TotalAttack, damageType);
 	}
 }

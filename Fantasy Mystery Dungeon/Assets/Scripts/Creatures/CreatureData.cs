@@ -10,7 +10,7 @@ public class CreatureData : ScriptableObject
     public int baseHealth = 3;
     public int baseAttack = 3;
     public int baseDefense = 3;
-    //All base stats should add to 8 for monsters and 9 for characters
+    //All base stats should add to 8 for monsters and 10 for characters
     public int statTotal
     {
         get
@@ -28,9 +28,9 @@ public class CreatureData : ScriptableObject
             creatureName = defaultName;
         }
         
-        baseHealth  = Mathf.Clamp(baseHealth,  0, 5);
-        baseAttack  = Mathf.Clamp(baseAttack,  0, 5);
-        baseDefense = Mathf.Clamp(baseDefense, 0, 5);
+        baseHealth  = Mathf.Clamp(baseHealth,  1, 5);
+        baseAttack  = Mathf.Clamp(baseAttack,  1, 5);
+        baseDefense = Mathf.Clamp(baseDefense, 1, 5);
 
         if(statTotal < 8)
         {
